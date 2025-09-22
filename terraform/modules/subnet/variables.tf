@@ -10,7 +10,3 @@ variable "subnet" {
 variable "virtual_network" {
     type = map(string) 
 }
-
-variable "resource_group" {
-    type = map(string)
-}

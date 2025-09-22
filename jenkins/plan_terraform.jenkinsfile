@@ -1,19 +1,52 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Check Terraform Dependency') {
-            steps {
-                echo "Checking Terraform Dependency"
+    environment {
+        azure_tenant_id  = credentials('AZURE_TENANT_ID')
+        azure_app_id     = credentials('AZURE_TERRAFORM_APP_ID')
+        azure_app_secret = credentials('AZURE_APP_SECRET')
+    }
 
-                sh '''
-                    if terraform version > /dev/null; then
-                        echo "Terraform installed with version: $(terraform version)"
-                    else
-                        echo "Terraform not installed!!!"
-                        exit 1
-                    fi
-                '''
+    stages {
+        stage('Check Dependencies') {
+            parallel {
+                stage('Terraform') {
+                    steps {
+                        sh '''
+                            if terraform version > /dev/null; then
+                                echo "Terraform installed with version: $(terraform version)"
+                            else
+                                echo "Terraform not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Azure CLI') {
+                    steps {
+                        sh '''
+                            if az version > /dev/null; then
+                                echo "Azure CLI installed - $(az version)"
+                            else
+                                echo "Azure CLI not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Azure CLI Login') {
+            steps {
+                echo "Logging into Azure CLI"
+
+                dir('terraform') {
+                    sh '''
+                        az login --service-principal --username $azure_app_id --password $azure_app_secret --tenant $azure_tenant_id
+                    '''
+                }
             }
         }
 

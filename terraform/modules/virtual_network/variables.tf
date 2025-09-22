@@ -7,7 +7,3 @@ variable "virtual_network" {
         tags           = map(string)
     }))
 }
-
-variable "resource_group" {
-    type = map(string)
-}
