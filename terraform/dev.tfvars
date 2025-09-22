@@ -16,13 +16,13 @@ subnet = [
     {
         name             = "public-subnet"
         resource_group   = "DevOps"
-        vnet_name        = "DevOps-VNet"
+        virtual_network  = "DevOps-VNet"
         address_prefixes = ["10.0.1.0/24"]
     },
     {
         name             = "private-subnet"
         resource_group   = "DevOps"
-        vnet_name        = "DevOps-VNet"
+        virtual_network  = "DevOps-VNet"
         address_prefixes = ["10.0.2.0/24"]
     }
 ]
