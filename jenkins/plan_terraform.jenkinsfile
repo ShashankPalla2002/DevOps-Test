@@ -5,6 +5,7 @@ pipeline {
         azure_tenant_id  = credentials('AZURE_TENANT_ID')
         azure_app_id     = credentials('AZURE_TERRAFORM_APP_ID')
         azure_app_secret = credentials('AZURE_APP_SECRET')
+        TF_CLI_ARGS      = "-no-color"
     }
 
     stages {
