@@ -5,5 +5,5 @@ output "virtual_network_name" {
 
 output "virtual_network_id" {
   description = "Map of VNet IDs keyed by Vnet Names"
-  value       = { for vnet in azurerm_virtual_network.DevOps_VNet : vnet.name => v.id }
+  value       = { for vnet in azurerm_virtual_network.DevOps_VNet : vnet.name => vnet.id }
 }
