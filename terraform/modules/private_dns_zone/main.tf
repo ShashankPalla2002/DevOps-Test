@@ -13,4 +13,8 @@ resource "azurerm_private_dns_zone_virtual_network_link" "DevOps_private_dns_zon
     resource_group_name   = each.value.resource_group_name
     virtual_network_id    = var.virtual_network[each.value.virtual_network]
     private_dns_zone_name = each.value.name
+
+    depends_on = [ 
+        azurerm_private_dns_zone.DevOps_private_dns_zone 
+    ]
 }

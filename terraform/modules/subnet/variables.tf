@@ -4,6 +4,14 @@ variable "subnet" {
         resource_group    = string
         virtual_network   = string
         address_prefixes  = list(string)
+
+        delegation        = optional(object({
+            name               = string
+            service_delegation = object({
+                name    = string
+                actions = list(string)
+            })
+        }))
     }))
 }
 
