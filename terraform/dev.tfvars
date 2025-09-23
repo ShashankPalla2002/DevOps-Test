@@ -168,7 +168,7 @@ mysql_flexible_server = [
         location              = "southindia"
         administrator_login   = "mysql"
         delegated_subnet_name = "private-subnet"
-        private_dns_zone_name = "devops.mysql.database.azure.com"
+        private_dns_zone_name = "privatelink.mysql.database.azure.com"
         sku_name              = "B_Standard_B1ms"
 
         tags                = {
