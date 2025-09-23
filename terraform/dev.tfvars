@@ -187,7 +187,7 @@ kubernetes_cluster = [
         }
 
         dns_prefix                 = "devops-aks"
-        private_cluster_enabled    = true
+        private_cluster_enabled    = false
 
         network_profile            = {
             network_plugin    = "azure"
