@@ -119,7 +119,7 @@ linux_virtual_machine = [
         os_disk                 = {
             name                 = "angular-webserver-osdisk"
             caching              = "ReadWrite"
-            storage_account_type = "ReadWrite"
+            storage_account_type = "StandardSSD_LRS"
             disk_size_gb         = 30
         }
 
