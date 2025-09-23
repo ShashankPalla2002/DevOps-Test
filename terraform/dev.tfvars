@@ -186,7 +186,7 @@ kubernetes_cluster = [
             subnet_name = "private-subnet"
         }
 
-        dns_prefix_private_cluster = "devops-aks"
+        dns_prefix                 = "devops-aks"
         private_cluster_enabled    = true
 
         network_profile            = {

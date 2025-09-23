@@ -4,7 +4,12 @@ resource "azurerm_kubernetes_cluster" "DevOps_kubernetes_cluster" {
     name                       = each.value.name
     location                   = each.value.location
     resource_group_name        = each.value.resource_group_name
-    dns_prefix_private_cluster = each.value.dns_prefix_private_cluster
+    dns_prefix                 = try(
+        each.value.dns_prefix, null
+    )
+    dns_prefix_private_cluster = try(
+        each.value.dns_prefix_private_cluster, null
+    )
     private_cluster_enabled    = each.value.private_cluster_enabled
 
     identity {

@@ -138,7 +138,8 @@ variable "kubernetes_cluster" {
             subnet_name = string
         })
 
-        dns_prefix_private_cluster = string
+        dns_prefix                 = optional(string)
+        dns_prefix_private_cluster = optional(string)
         private_cluster_enabled    = bool
 
         network_profile            = object({
