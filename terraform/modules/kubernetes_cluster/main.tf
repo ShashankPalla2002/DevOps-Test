@@ -1,11 +1,11 @@
 resource "azurerm_kubernetes_cluster" "DevOps_kubernetes_cluster" {
     for_each = { for k8s in var.kubernetes_cluster : k8s.name => k8s }
 
-    name                    = each.value.name
-    location                = each.value.location
-    resource_group_name     = each.value.resource_group_name
-    dns_prefix              = each.value.dns_prefix
-    private_cluster_enabled = each.value.private_cluster_enabled
+    name                       = each.value.name
+    location                   = each.value.location
+    resource_group_name        = each.value.resource_group_name
+    dns_prefix_private_cluster = each.value.dns_prefix_private_cluster
+    private_cluster_enabled    = each.value.private_cluster_enabled
 
     identity {
         type = each.value.identity.type

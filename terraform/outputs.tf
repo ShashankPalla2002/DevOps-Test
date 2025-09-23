@@ -33,11 +33,6 @@ output "private_dns_zone_id" {
     value       = module.private_dns_zone.private_dns_zone_id
 }
 
-output "private_dns_zone_fqdn" {
-    description = "The FQDN of the Private DNS Zone"
-    value       = module.private_dns_zone.private_dns_zone_fqdn
-}
-
 output "mysql_flexible_server_id" {
     description = "The ID of the MySQL Server"
     value       = module.mysql_flexible_server.mysql_flexible_server_id

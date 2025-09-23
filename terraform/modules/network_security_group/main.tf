@@ -23,7 +23,7 @@ resource "azurerm_network_security_rule" "DevOps_network_security_group_rule" {
     network_security_group_name = azurerm_network_security_group.Devops_network_security_group[each.value.nsg_name].name
 }
 
-resource "azurerm_subnet_network_security_group_association" "robot_shop_nsg_association" {
+resource "azurerm_subnet_network_security_group_association" "DevOps_nsg_association" {
     for_each = { for association in var.network_security_group : association.name => association }
 
     subnet_id                 = var.subnet[each.value.subnet_name]

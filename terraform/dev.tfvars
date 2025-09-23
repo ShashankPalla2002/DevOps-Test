@@ -32,7 +32,7 @@ network_security_group = [
         name                = "public-subnet-nsg"
         location            = "southindia"
         resource_group_name = "DevOps"
-        subnet_name         = "DevOps-VNet"
+        subnet_name         = "public-subnet"
         tags                = {
             environment = "dev"
             project     = "Internal"
@@ -137,7 +137,7 @@ linux_virtual_machine = [
 key_vault = {
     name = "DevOpsKeyVault0205"
     resource_group_name = "DevOps"
-    secret_name = ["Angular-Webserver", "DevOps-MySQL"]
+    secret_name = ["Angular-Webserver", "devopsmysql0205"]
 }
 
 private_dns_zone = [
@@ -155,13 +155,13 @@ private_dns_zone = [
 
 mysql_flexible_server = [
     {
-        name                  = "DevOps-MySQL"
+        name                  = "devopsmysql0205"
         resource_group_name   = "DevOps"
         location              = "southindia"
         administrator_login   = "mysql"
         delegated_subnet_name = "private-subnet"
         private_dns_zone_name = "devops.mysql.database.azure.com"
-        sku_name              = "dev/test"
+        sku_name              = "B_Standard_B1ms"
         tags                  = {
             environment = "dev"
             project     = "Robot-Shop"

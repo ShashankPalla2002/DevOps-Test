@@ -24,7 +24,7 @@ module "network_interface" {
 module "linux_virtual_machine" {
     source                = "./modules/linux_virtual_machine"
     linux_virtual_machine = var.linux_virtual_machine
-    network_interface     = module.network_interface
+    network_interface     = module.network_interface.network_interface_id
     key_vault             = var.key_vault
 }
 
@@ -37,7 +37,7 @@ module "network_security_group" {
 module "private_dns_zone" {
     source           = "./modules/private_dns_zone"
     private_dns_zone = var.private_dns_zone
-    virtual_network  = module.virtual_network.virtual_network_name
+    virtual_network  = module.virtual_network.virtual_network_id
 }
 
 module "mysql_flexible_server" {
