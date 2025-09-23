@@ -87,5 +87,20 @@ pipeline {
                 }
             }
         }
+
+        stage('Terraform Apply') {
+            when {
+                expression { params.Deploy_Terraform }
+            }
+            steps {
+                echo "Applying Terraform in Azure"
+
+                dir('terraform') {
+                    sh '''
+                        terraform apply -var-file=dev.tfvars
+                    '''
+                }
+            }
+        }
     }
 }
