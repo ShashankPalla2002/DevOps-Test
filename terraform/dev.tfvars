@@ -104,7 +104,7 @@ network_interface = [
 
         tags                = {
             environment = "dev"
-            project     = "Robot-Shop"
+            project     = "Internal"
         }
     } 
 ]
@@ -148,7 +148,7 @@ private_dns_zone = [
         
         tags                = {
             environment = "dev"
-            project     = "Robot-Shop"
+            project     = "Internal"
         }
     }
 ]
@@ -162,9 +162,10 @@ mysql_flexible_server = [
         delegated_subnet_name = "private-subnet"
         private_dns_zone_name = "devops.mysql.database.azure.com"
         sku_name              = "B_Standard_B1ms"
-        tags                  = {
+
+        tags                = {
             environment = "dev"
-            project     = "Robot-Shop"
+            project     = "Internal"
         }
     }
 ]
@@ -183,7 +184,7 @@ kubernetes_cluster = [
             name        = "systemnode"
             node_count  = 1
             vm_size     = "Standard_B2ms"
-            subnet_name = "private-subnet"
+            subnet_name = "public-subnet"
         }
 
         dns_prefix                 = "devops-aks"
@@ -209,7 +210,7 @@ container_registry = [
 
         tags                = {
             environment = "dev"
-            project     = "Robot-Shop"
+            project     = "Internal"
         }
     }
 ]
