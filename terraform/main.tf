@@ -46,6 +46,7 @@ module "mysql_flexible_server" {
     subnet                = module.subnet.subnet_id
     private_dns_zone      = module.private_dns_zone.private_dns_zone_id
     key_vault             = var.key_vault
+    depends_on            = [module.private_dns_zone]
 }
 
 module "kubernetes_cluster" {
