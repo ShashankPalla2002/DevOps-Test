@@ -20,7 +20,7 @@ resource "azurerm_network_security_rule" "DevOps_network_security_group_rule" {
     source_address_prefix       = each.value.rule.source_address_prefix
     destination_address_prefix  = each.value.rule.destination_address_prefix
     resource_group_name         = each.value.resource_group_name
-    network_security_group_name = azurerm_network_security_group.Devops_network_security_group[each.value.name].name
+    network_security_group_name = azurerm_network_security_group.Devops_network_security_group[each.value.nsg_name].name
 }
 
 resource "azurerm_subnet_network_security_group_association" "DevOps_nsg_association" {

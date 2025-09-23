@@ -30,7 +30,7 @@ locals {
                 for rule in nsg.rules : {
                     key = "${nsg.name}-${rule.name}"
                     rule = rule
-                    name = rule.name
+                    nsg_name = nsg.name
                     resource_group_name = nsg.resource_group_name
                 }
             ]
