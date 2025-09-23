@@ -29,7 +29,7 @@ subnet = [
             name               = "mysql-flexible-server-delegation"
             service_delegation = {
                 name    = "Microsoft.DBforMySQL/flexibleServers"
-                actions = ["Microsoft.Network/virtualNetworks/subnets/*"]
+                actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
             }
         }
     }
