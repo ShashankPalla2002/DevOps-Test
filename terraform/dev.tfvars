@@ -150,7 +150,7 @@ key_vault = {
 
 private_dns_zone = [
     {
-        name                = "devops.mysql.database.azure.com"
+        name                = "privatelink.mysql.database.azure.com"
         resource_group_name = "DevOps"
         virtual_network     = "DevOps-VNet"
         
