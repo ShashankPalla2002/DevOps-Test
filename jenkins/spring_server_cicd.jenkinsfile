@@ -193,7 +193,7 @@ pipeline {
                     sh '''
                         helm upgrade $HELM_RELEASE . -f ./values.yaml \
                         --namespace $NAMESPACE --install --atomic \
-                        set image="$ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG"
+                        --set image="$ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG"
                     '''
                 }
             }
