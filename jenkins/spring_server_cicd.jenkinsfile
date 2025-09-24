@@ -56,8 +56,8 @@ pipeline {
                 stage('Kubectl') {
                     steps {
                         sh '''
-                            if kubectl version > /dev/null; then
-                                echo "Kubectl installed - $(kubectl version)"
+                            if kubectl version --client > /dev/null; then
+                                echo "Kubectl installed - $(kubectl version --client)"
                             else
                                 echo "Kubectl not installed!!!"
                                 exit 1
