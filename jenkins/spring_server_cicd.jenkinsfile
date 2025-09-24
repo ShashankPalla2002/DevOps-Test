@@ -167,16 +167,6 @@ pipeline {
             }
         }
 
-        stage('Export Kubeconfig to Environment') {
-            steps {
-                withCredentials([file(credentialsId: 'Kubeconfig', variable: 'KUBECONFIG_FILE')]) {
-                    script {
-                        env.KUBECONFIG = KUBECONFIG_FILE
-                    }
-                }
-            }
-        }
-
         stage('Validate Helm Charts') {
             steps {
                 dir('.server-charts') {
@@ -189,22 +179,26 @@ pipeline {
 
         stage('Deploy Helm Charts') {
             steps {
-                dir('.server-charts') {
-                    sh '''
-                        helm upgrade $HELM_RELEASE . -f ./values.yaml \
-                        --namespace $NAMESPACE --install --atomic \
-                        --set image="$ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG"
-                    '''
+                withCredentials([file(credentialsId: 'Kubeconfig', variable: 'KUBECONFIG')]) {
+                    dir('.server-charts') {
+                        sh '''
+                            helm upgrade $HELM_RELEASE . -f ./values.yaml \
+                            --namespace $NAMESPACE --install --atomic \
+                            --set image="$ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG"
+                        '''
+                    }
                 }
             }
         }
 
         stage('Verify Helm Deployment') {
             steps {
-                sh '''
-                    kubectl rollout status deployment/spring-boot-server --namespace $NAMESPACE
-                    helm status $HELM_RELEASE --namespace $NAMESPACE --output table
-                '''
+                withCredentials([file(credentialsId: 'Kubeconfig', variable: 'KUBECONFIG')]) {
+                    sh '''
+                        kubectl rollout status deployment/spring-boot-server --namespace $NAMESPACE
+                        helm status $HELM_RELEASE --namespace $NAMESPACE --output table
+                    '''
+                }
             }
         }
     }
