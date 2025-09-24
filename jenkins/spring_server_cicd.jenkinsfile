@@ -65,6 +65,19 @@ pipeline {
                         '''
                     }
                 }
+
+                stage('Buildah') {
+                    steps {
+                        sh '''
+                            if buildah --version > /dev/null; then
+                                echo "Buildah installed - $(buildah --version)"
+                            else
+                                echo "Buildah not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
             }
         }
 
@@ -124,7 +137,7 @@ pipeline {
             }
         }
 
-        stage('Get Latest Docker Image Tag') {
+        stage('Get Latest Image Tag') {
             steps {
                 script {
                     def commitSHA = env.GIT_COMMIT.take(7)
@@ -133,22 +146,22 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Image') {
             steps {
                 dir('spring-boot-server') {
                     sh '''
-                        docker build -t $IMAGE_NAME .
-                        docker tag $IMAGE_NAME $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        buildah build -t $IMAGE_NAME .
+                        buildah tag $IMAGE_NAME $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
                     ''' 
                 }
             }
         }
 
-        stage('Push Docker Image') {
+        stage('Push Image') {
             steps {
                 dir('spring-boot-server') {
                     sh '''
-                        docker push $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        buildah push $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
                     '''
                 }
             }
