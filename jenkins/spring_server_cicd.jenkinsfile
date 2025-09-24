@@ -5,7 +5,7 @@ pipeline {
         ACR_CLIENT_ID     = credentials('AZURE_ACR_APP_ID')
         ACR_CLIENT_SECRET = credentials('AZURE_ACR_APP_SECRET')
         ACR_URL           = "devopsacr0205.azurecr.io"
-        ACR_REGISTRY      = "DevOpsACR0205"
+        ACR_REPO          = "devops"
         IMAGE_NAME        = "springbootserver"
         HELM_RELEASE      = "springbootserver"
         NAMESPACE         = "devops"
@@ -151,7 +151,7 @@ pipeline {
                 dir('spring-boot-server') {
                     sh '''
                         buildah build -t $IMAGE_NAME .
-                        buildah tag $IMAGE_NAME $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        buildah tag $IMAGE_NAME $ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG
                     ''' 
                 }
             }
@@ -161,7 +161,7 @@ pipeline {
             steps {
                 dir('spring-boot-server') {
                     sh '''
-                        buildah push $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                        buildah push $ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG
                     '''
                 }
             }
@@ -193,7 +193,7 @@ pipeline {
                     sh '''
                         helm upgrade $HELM_RELEASE . -f ./values.yaml \
                         --namespace $NAMESPACE --install --atomic \
-                        set image="$ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+                        set image="$ACR_URL/$ACR_REPO/$IMAGE_NAME:$IMAGE_TAG"
                     '''
                 }
             }
