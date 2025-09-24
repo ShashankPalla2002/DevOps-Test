@@ -10,6 +10,8 @@ replicas: 1
 
 image: ${IMAGE} #placeholder
 imagePullPolicy: Always
+imagePullSecrets:
+  - name: acr-creds
 
 container:
   ports:

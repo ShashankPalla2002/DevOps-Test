@@ -17,6 +17,8 @@ spec:
       labels:
 {{ .Values.labels | toYaml | indent 8 }} 
     spec:
+      imagePullSecrets:
+{{ .Values.imagePullSecrets | toYaml | indent 8 }}
       containers:
         - name: {{ .Values.name }}
           image: {{ .Values.image }}
