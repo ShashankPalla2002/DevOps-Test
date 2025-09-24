@@ -4,7 +4,7 @@ pipeline {
     environment {
         ARM_TENANT_ID       = credentials('AZURE_TENANT_ID')
         ARM_CLIENT_ID       = credentials('AZURE_TERRAFORM_APP_ID')
-        ARM_CLIENT_SECRET   = credentials('AZURE_APP_SECRET')
+        ARM_CLIENT_SECRET   = credentials('AZURE_TERRAFORM_APP_SECRET')
         ARM_SUBSCRIPTION_ID = credentials('AZURE_SUBSCRIPTION_ID')
         TF_CLI_ARGS         = "-no-color"
     }

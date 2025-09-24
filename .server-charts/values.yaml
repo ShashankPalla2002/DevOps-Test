@@ -1,0 +1,40 @@
+name: spring-boot-server
+
+labels:
+  Project: DevOps
+  Cloud: Azure
+  CICD: Jenkins
+  Technology: Java
+
+replicas: 1
+
+image: ${IMAGE} #placeholder
+imagePullPolicy: Always
+
+container:
+  ports:
+    - containerPort: 8080
+      name: API
+  env:
+    - name: DB_URL
+      valueFrom:
+        secretKeyRef:
+          name: mysql-creds
+          key: url
+    - name: DB_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: mysql-creds
+          key: username
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mysql-creds
+          key: password
+
+service:
+  type: NodePort
+  ports:
+    - name: API
+      port: 8080
+      targetPort: API

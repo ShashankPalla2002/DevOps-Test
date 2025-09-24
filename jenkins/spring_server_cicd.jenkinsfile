@@ -1,0 +1,198 @@
+pipeline {
+    agent any
+
+    environment {
+        ACR_CLIENT_ID     = credentials('AZURE_ACR_APP_ID')
+        ACR_CLIENT_SECRET = credentials('AZURE_ACR_APP_SECRET')
+        ACR_URL           = "devopsacr0205.azurecr.io"
+        ACR_REGISTRY      = "DevOpsACR0205"
+        IMAGE_NAME        = "springbootserver"
+        HELM_RELEASE      = "springbootserver"
+        NAMESPACE         = "devops"
+    }
+
+    stages {
+        stage('Check Dependencies') {
+            parallel {
+                stage('Maven') {
+                    steps {
+                        sh '''
+                            if mvn --version > /dev/null; then
+                                echo "Maven installed - $(mvn --version)"
+                            else
+                                echo "Maven not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Java') {
+                    steps {
+                        sh '''
+                            if java --version > /dev/null; then
+                                echo "Java installed - $(java --version)"
+                            else
+                                echo "Java not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Helm') {
+                    steps {
+                        sh '''
+                            if helm version > /dev/null; then
+                                echo "Helm installed - $(helm version)"
+                            else
+                                echo "Helm not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Kubectl') {
+                    steps {
+                        sh '''
+                            if kubectl version > /dev/null; then
+                                echo "Kubectl installed - $(kubectl version)"
+                            else
+                                echo "Kubectl not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Clean') {
+            steps {
+                dir('spring-boot-server') {
+                    sh 'mvn -B clean'
+                }
+            }
+        }
+
+        stage('Validate') {
+            steps {
+                dir('spring-boot-server') {
+                    sh 'mvn -B validate'
+                }
+            }
+        }
+
+        stage('Compile') {
+            steps {
+                dir('spring-boot-server') {
+                    sh 'mvn -B compile'
+                }
+            }
+        }
+
+        // stage('Test') {
+        //     steps {
+        //         dir('spring-boot-server') {
+        //             sh 'mvn -B test'
+        //         }
+        //     }
+        // }
+
+        stage('Package') {
+            steps {
+                dir('spring-boot-server') {
+                    sh 'mvn -B package -DskipTests'
+                }
+            }
+        }
+
+        stage('Install') {
+            steps {
+                dir('spring-boot-server') {
+                    sh 'mvn -B install -DskipTests'
+                }
+            }
+        }
+
+        stage('ACR Login') {
+            steps {
+                sh '''
+                    docker login $ACR_URL -u $ACR_CLIENT_ID -p $ACR_CLIENT_PASSWORD
+                '''
+            }
+        }
+
+        stage('Get Latest Docker Image Tag') {
+            steps {
+                script {
+                    def commitSHA = env.GIT_COMMIT.take(7)
+                    env.IMAGE_TAG  = commitSHA
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                dir('spring-boot-server') {
+                    sh '''
+                        docker build -t $IMAGE_NAME .
+                        docker tag $IMAGE_NAME $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                    ''' 
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                dir('spring-boot-server') {
+                    sh '''
+                        docker push $ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+                    '''
+                }
+            }
+        }
+
+        stage('Export Kubeconfig to Environment') {
+            steps {
+                withCredentials([file(credentialsId: 'Kubeconfig', variable: 'KUBECONFIG')]) {
+                    script {
+                        env.KUBECONFIG = KUBECONFIG
+                    }
+                }
+            }
+        }
+
+        stage('Validate Helm Charts') {
+            steps {
+                dir('.server-charts') {
+                    sh '''
+                        helm lint
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy Helm Charts') {
+            steps {
+                dir('.server-charts') {
+                    sh '''
+                        helm upgrade $HELM_RELEASE . -f ./values.yaml \
+                        --namespace $NAMESPACE --install --atomic \
+                        set image="$ACR_URL/$ACR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+                    '''
+                }
+            }
+        }
+
+        stage('Verify Helm Deployment') {
+            steps {
+                sh '''
+                    kubectl rollout status deployment/spring-boot-server --namespace $NAMESPACE
+                    helm status $HELM_RELEASE --namespace $NAMESPACE --output table
+                '''
+            }
+        }
+    }
+}
