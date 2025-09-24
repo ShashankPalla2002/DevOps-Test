@@ -14,7 +14,7 @@ imagePullPolicy: Always
 container:
   ports:
     - containerPort: 8080
-      name: API
+      name: api
   env:
     - name: DB_URL
       valueFrom:
@@ -35,6 +35,6 @@ container:
 service:
   type: NodePort
   ports:
-    - name: API
+    - name: api
       port: 8080
-      targetPort: API
+      targetPort: api
