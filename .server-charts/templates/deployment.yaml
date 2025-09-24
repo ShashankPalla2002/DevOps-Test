@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.name }}
-          image: {{ .Value.image }}
+          image: {{ .Values.image }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           ports:
 {{ .Values.container.ports | toYaml | indent 12 }}
