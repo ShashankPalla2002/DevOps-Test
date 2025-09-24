@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 maven:3.8.6-eclipse-temurin-17
+FROM devopsacr0205.azurecr.io/devops/maven:3.8.6-eclipse-temurin-17
 
 WORKDIR /app
 
