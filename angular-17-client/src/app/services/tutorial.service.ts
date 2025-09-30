@@ -5,7 +5,7 @@ import { Tutorial } from '../models/tutorial.model';
 
 // const baseUrl = 'http://localhost:8080/api/tutorials';
 
-const baseUrl = 'http://springboot-service.dexter-1.svc.cluster.local:32023/api/tutorials';
+const baseUrl = '/api/tutorials';
 
 @Injectable({
   providedIn: 'root',
