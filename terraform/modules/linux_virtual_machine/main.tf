@@ -19,6 +19,17 @@ resource "azurerm_linux_virtual_machine" "DevOps_linux_vm" {
     size                  = each.value.size
     network_interface_ids = [ for nic in each.value.network_interface_names : var.network_interface[nic] ]
 
+    dynamic "identity" {
+        for_each = each.value.identity != null ? [each.value.identity] : []
+
+        content {
+            type         = identity.value.type
+            identity_ids = try(
+                identity.value.identity_ids, null
+            )
+        }
+    }
+
     os_disk {
         name                 = each.value.os_disk.name
         caching              = each.value.os_disk.caching

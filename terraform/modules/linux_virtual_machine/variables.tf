@@ -20,6 +20,11 @@ variable "linux_virtual_machine" {
             version   = string
         })
 
+        identity                = optional(object({
+            type         = string
+            identity_ids = optional(list(string))
+        }))
+
         admin_username          = string
     }))
 }

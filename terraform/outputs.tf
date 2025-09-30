@@ -57,3 +57,13 @@ output "container_registry_login_url" {
     description = "The login URL of the ACR"
     value       = module.container_registry.container_registry_login_url
 }
+
+output "storage_account_id" {
+    description = "The ID of Storage Account"
+    value       = module.storage_account.storage_account_id
+}
+
+output "storage_container_id" {
+    description = "The ID of Storage Container"
+    value       = module.storage_container.storage_container_id
+}

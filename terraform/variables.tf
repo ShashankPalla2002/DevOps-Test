@@ -74,6 +74,11 @@ variable "linux_virtual_machine" {
             version   = string
         })
 
+        identity                = optional(object({
+            type         = string
+            identity_ids = optional(list(string))
+        }))
+
         admin_username          = string
     }))
 }
@@ -168,5 +173,30 @@ variable "container_registry" {
         location            = string
         sku                 = string
         tags                = map(string)
+    }))
+}
+
+variable "storage_account" {
+    type = list(object({
+        name                     = string
+        resource_group_name      = string
+        location                 = string
+        account_tier             = string
+        account_replication_type = string
+        tags                     = optional(map(string))
+
+        network_rules = object({
+            default_action          = string
+            virtual_network_subnets = optional(list(string))
+            ip_rules                = optional(list(string))
+        })
+    }))
+}
+
+variable "storage_container" {
+    type = list(object({
+        storage_account       = string
+        name                  = string
+        container_access_type = string
     }))
 }

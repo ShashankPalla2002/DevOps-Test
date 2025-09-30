@@ -137,8 +137,12 @@ linux_virtual_machine = [
             sku       = "server"
             version   = "latest"
         }
+
+        identity = {
+            type = "SystemAssigned"
+        }
         
-        admin_username          = "webserver"
+        admin_username = "webserver"
     }
 ]
 
@@ -220,5 +224,33 @@ container_registry = [
             environment = "dev"
             project     = "Internal"
         }
+    }
+]
+
+storage_account = [
+    {
+        name                     = "angularstaticfiles"
+        resource_group_name      = "DevOps"
+        location                 = "southindia"
+        account_tier             = "Standard"
+        account_replication_type = "GRS"
+
+        tags = {
+            environment = "dev"
+            project     = "Internal"
+        }
+
+        network_rules = {
+            default_action          = "Deny"
+            virtual_network_subnets = ["public-subnet"]
+        }
+    }
+]
+
+storage_container = [
+    {
+        storage_account       = "angularstaticfiles"
+        name                  = "staticfiles"
+        container_access_type = "private"
     }
 ]
