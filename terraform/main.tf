@@ -69,5 +69,5 @@ module "storage_account" {
 module "storage_container" {
     source = "./modules/storage_container"
     storage_container = var.storage_container
-    storage_account = module.storage_account.storage_account_id
+    storage_account = module.storage_account.storage_account_name
 }
