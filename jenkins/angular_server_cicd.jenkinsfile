@@ -69,8 +69,8 @@ pipeline {
                 dir('angular-17-client') {
                     sh '''
                         az storage blob upload-batch \
-                        --account-name $AZURE_STORAGE_ACCOUNT
-                        --destination $AZURE_CONTAINER_NAME
+                        --account-name $AZURE_STORAGE_ACCOUNT \
+                        --destination $AZURE_CONTAINER_NAME \
                         --source angular-17-client/dist/angular-17-crud/browser \
                         --overwrite 
                     '''
