@@ -1,0 +1,90 @@
+pipeline {
+    agent any
+
+    environment {
+        ARM_TENANT_ID         = credentials('AZURE_TENANT_ID')
+        ARM_CLIENT_ID         = credentials('AZURE_TERRAFORM_APP_ID')
+        ARM_CLIENT_SECRET     = credentials('AZURE_TERRAFORM_APP_SECRET')
+        ARM_SUBSCRIPTION_ID   = credentials('AZURE_SUBSCRIPTION_ID')
+        AZURE_STORAGE_ACCOUNT = 'angularstaticfiles'
+        AZURE_CONTAINER_NAME  = 'staticfiles'
+    }
+
+    stages {
+        stage('Check Dependencies') {
+            parallel {
+                stage('Node') {
+                    steps {
+                        sh '''
+                            if node --version > /dev/null; then
+                                echo "Node installed - $(node --version)"
+                            else
+                                echo "Node not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+
+                stage('Azure CLI') {
+                    steps {
+                        sh '''
+                            if az version > /dev/null; then
+                                echo "Azure CLI installed - $(az version)"
+                            else
+                                echo "Azure CLI not installed!!!"
+                                exit 1
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Azure CLI Login') {
+            steps {
+                echo "Logging into Azure CLI"
+
+                dir('terraform') {
+                    sh '''
+                        az login --service-principal --username $ARM_CLIENT_ID --password $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+                    '''
+                }
+            }
+        }
+
+        stage('Angular Build') {
+            steps {
+                dir('angular-17-client') {
+                    sh '''
+                        ng build --configuration production
+                    '''
+                }
+            }
+        }        
+
+        stage('Upload Build to Azure storage') {
+            steps {
+                dir('angular-17-client') {
+                    sh '''
+                        az storage blob upload-batch \
+                        --account-name $AZURE_STORAGE_ACCOUNT
+                        --destination $AZURE_CONTAINER_NAME
+                        --source angular-17-client/dist/angular-17-crud/browser \
+                        --overwrite 
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Angular Build Deployed Successfully!'
+        }
+
+        failure {
+            echo 'Angular Deployment Failed!'
+        }
+    }
+}
