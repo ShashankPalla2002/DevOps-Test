@@ -18,4 +18,8 @@ resource "azurerm_subnet" "DevOps_subnet" {
             }
         }
     }
+
+    service_endpoints = try(
+        each.value.service_endpoints, null
+    )
 }

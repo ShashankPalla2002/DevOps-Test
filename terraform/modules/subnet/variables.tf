@@ -12,6 +12,8 @@ variable "subnet" {
                 actions = list(string)
             })
         }))
+
+        service_endpoints = optional(list(string))
     }))
 }
 

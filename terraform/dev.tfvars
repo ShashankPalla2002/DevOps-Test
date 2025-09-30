@@ -14,10 +14,11 @@ virtual_network = [
 
 subnet = [
     {
-        name             = "public-subnet"
-        resource_group   = "DevOps"
-        virtual_network  = "DevOps-VNet"
-        address_prefixes = ["10.0.1.0/24"]
+        name              = "public-subnet"
+        resource_group    = "DevOps"
+        virtual_network   = "DevOps-VNet"
+        address_prefixes  = ["10.0.1.0/24"]
+        service_endpoints = ["Microsoft.Storage"] 
     },
     {
         name             = "private-subnet"
