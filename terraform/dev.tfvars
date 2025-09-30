@@ -242,8 +242,7 @@ storage_account = [
         }
 
         network_rules = {
-            default_action          = "Deny"
-            virtual_network_subnets = ["public-subnet"]
+            default_action = "Allow"
         }
     }
 ]
