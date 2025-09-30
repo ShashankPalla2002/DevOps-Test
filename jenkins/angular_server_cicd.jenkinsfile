@@ -57,6 +57,7 @@ pipeline {
             steps {
                 dir('angular-17-client') {
                     sh '''
+                        npm ci
                         npx ng build --configuration production
                     '''
                 }
