@@ -49,7 +49,7 @@ network_security_group = [
         rules               = [
             {
                 name                       = "HTTP"
-                priority                   = 100
+                priority                   = 110
                 direction                  = "Inbound"
                 access                     = "Allow"
                 protocol                   = "Tcp"
@@ -60,7 +60,7 @@ network_security_group = [
             },
             {
                 name                       = "HTTPS"
-                priority                   = 110
+                priority                   = 120
                 direction                  = "Inbound"
                 access                     = "Allow"
                 protocol                   = "Tcp"
@@ -71,7 +71,7 @@ network_security_group = [
             },
             {
                 name                       = "SSH"
-                priority                   = 120
+                priority                   = 130
                 direction                  = "Inbound"
                 access                     = "Allow"
                 protocol                   = "Tcp"
@@ -79,6 +79,17 @@ network_security_group = [
                 destination_port_range     = "22"
                 source_address_prefix      = "*"
                 destination_address_prefix = "10.0.1.0/24"
+            },
+            {
+                name                       = "AllowAzureLoadBalancerProbe"
+                priority                   = 100
+                direction                  = "Inbound"
+                access                     = "Allow"
+                protocol                   = "*"
+                source_port_range          = "*"
+                destination_port_range     = "80"
+                source_address_prefix      = "AzureLoadBalancer"
+                destination_address_prefix = "*"
             }
         ]
     }
