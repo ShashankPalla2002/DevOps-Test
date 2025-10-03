@@ -319,7 +319,7 @@ load_balancer_inbound_rule = [
         protocol                       = "Tcp"
         frontend_port                  = 80
         backend_port                   = 80
-        backend_address_pool           = "WebServerLB-backendaddresspool"
+        backend_address_pool           = ["WebServerLB-backendaddresspool"]
         probe                          = "WebServerLB-probe"
     }
 ]

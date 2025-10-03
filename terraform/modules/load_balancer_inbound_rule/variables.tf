@@ -6,7 +6,7 @@ variable "load_balancer_inbound_rule" {
         protocol                       = string
         frontend_port                  = number
         backend_port                   = number
-        backend_address_pool           = string
+        backend_address_pool           = list(string)
         probe                          = string
     }))
 }

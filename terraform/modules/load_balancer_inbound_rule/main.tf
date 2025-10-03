@@ -7,6 +7,6 @@ resource "azurerm_lb_rule" "DevOps_load_balance_rule" {
     protocol                       = each.value.protocol
     frontend_port                  = each.value.frontend_port
     backend_port                   = each.value.backend_port
-    backend_address_pool_ids       = var.backend_address_pool[each.value.backend_address_pool]
+    backend_address_pool_ids       = [for backend in each.value.backend_address_pool : var.backend_address_pool[backend]]
     probe_id                       = var.load_balancer_probe[each.value.probe]
 }
