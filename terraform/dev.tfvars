@@ -56,7 +56,7 @@ network_security_group = [
                 source_port_range          = "*"
                 destination_port_range     = "80"
                 source_address_prefix      = "*"
-                destination_address_prefix = "10.0.1.0/24"
+                destination_address_prefix = "*"
             },
             {
                 name                       = "HTTPS"
@@ -67,7 +67,7 @@ network_security_group = [
                 source_port_range          = "*"
                 destination_port_range     = "443"
                 source_address_prefix      = "*"
-                destination_address_prefix = "10.0.1.0/24"
+                destination_address_prefix = "*"
             },
             {
                 name                       = "SSH"
@@ -78,7 +78,7 @@ network_security_group = [
                 source_port_range          = "*"
                 destination_port_range     = "22"
                 source_address_prefix      = "*"
-                destination_address_prefix = "10.0.1.0/24"
+                destination_address_prefix = "*"
             },
             {
                 name                       = "AllowAzureLoadBalancerProbe"
