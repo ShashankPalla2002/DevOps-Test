@@ -202,3 +202,57 @@ variable "storage_container" {
         container_access_type = string
     }))
 }
+
+variable "load_balancer" {
+    type = list(object({
+        name                = string
+        resource_group_name = string
+        location            = string
+        sku                 = string
+        tags                = map(string)
+
+        frontend_ip_configuration = object({
+            name                 = string
+            public_ip_address_id = string
+        })
+    }))
+}
+
+variable "backend_address_pool" {
+    type = list(object({
+        name         = string
+        loadbalancer = string
+    }))
+}
+
+variable "nic_backend_pool_association" {
+    type = list(object({
+        network_interface     = string
+        ip_configuration_name = string
+        backend_address_pool  = string
+    }))
+}
+
+variable "load_balancer_probe" {
+    type = list(object({
+        name            = string
+        loadbalancer    = string
+        protocol        = string
+        port            = number
+        probe_threshold = optional(number)
+        request_path    = optional(string) 
+    }))
+}
+
+variable "load_balancer_inbound_rule" {
+    type = list(object({
+        name                           = string
+        loadbalancer                   = string
+        frontend_ip_configuration_name = string
+        protocol                       = string
+        frontend_port                  = number
+        backend_port                   = number
+        backend_address_pool           = string
+        probe                          = string
+    }))
+}

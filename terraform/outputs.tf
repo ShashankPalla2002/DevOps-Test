@@ -67,3 +67,28 @@ output "storage_container_id" {
     description = "The ID of Storage Container"
     value       = module.storage_container.storage_container_id
 }
+
+output "load_balancer_id" {
+    description = "The ID of Load Balancer"
+    value       = module.load_balancer.load_balancer_id
+}
+
+output "backend_address_pool_id" {
+    description = "The ID of Backend Address Pool"
+    value       = module.backend_address_pool.backend_address_pool_id
+}
+
+output "nic_backend_pool_association_id" {
+    description = "The ID of NIC backend pool"
+    value       = module.nic_backend_address_pool_association.nic_backend_pool_association_id
+}
+
+output "load_balancer_probe_id" {
+    description = "The ID of Load Balancer probe"
+    value       = module.load_balancer_probe.load_balancer_probe_id
+}
+
+output "load_balancer_inbound_rule_id" {
+    description = "The ID of Load Balancer inbound rule"
+    value       = module.load_balancer_inbound_rule.load_balancer_inbound_rule_id
+}

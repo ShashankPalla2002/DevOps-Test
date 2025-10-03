@@ -18,7 +18,7 @@ subnet = [
         resource_group    = "DevOps"
         virtual_network   = "DevOps-VNet"
         address_prefixes  = ["10.0.1.0/24"]
-        service_endpoints = ["Microsoft.Storage"] 
+        service_endpoints = ["Microsoft.Storage"]
     },
     {
         name             = "private-subnet"
@@ -87,6 +87,17 @@ network_security_group = [
 public_ip = [
     {
         name                = "webserver-public-ip"
+        location            = "southindia"
+        resource_group_name = "DevOps"
+        allocation_method   = "Static"
+        sku                 = "Standard"
+        tags                = {
+            environment = "dev"
+            project     = "Internal"
+        }
+    },
+    {
+        name                = "WebServerLB-public-ip"
         location            = "southindia"
         resource_group_name = "DevOps"
         allocation_method   = "Static"
@@ -252,5 +263,63 @@ storage_container = [
         storage_account       = "angularstaticfiles"
         name                  = "staticfiles"
         container_access_type = "private"
+    }
+]
+
+load_balancer = [
+    {
+        name                = "WebServerLB"
+        resource_group_name = "DevOps"
+        location            = "southindia"
+        sku                 = "Standard"
+
+        frontend_ip_configuration = {
+            name                 = "WebServerLB-frontend-ip"
+            public_ip_address_id = "WebServerLB-public-ip"
+        }
+
+        tags                = {
+            environment = "dev"
+            project     = "Internal"
+        }
+    }
+]
+
+backend_address_pool = [
+    {
+        name         = "WebServerLB-backendaddresspool"
+        loadbalancer = "WebServerLB"
+    }
+]
+
+nic_backend_pool_association = [
+    {
+        network_interface     = "webserver-nic"
+        ip_configuration_name = "external-traffic"
+        backend_address_pool  = "WebServerLB-backendaddresspool"
+    }
+]
+
+load_balancer_probe = [
+    {
+        name            = "WebServerLB-probe"
+        loadbalancer    = "WebServerLB"
+        protocol        = "Http"
+        port            = 80
+        probe_threshold = 3
+        request_path    = "/"
+    }
+]
+
+load_balancer_inbound_rule = [
+    {
+        name                           = "WebServerLB-inboundrule-http"
+        loadbalancer                   = "WebServerLB"
+        frontend_ip_configuration_name = "WebServerLB-frontend-ip"
+        protocol                       = "Tcp"
+        frontend_port                  = 80
+        backend_port                   = 80
+        backend_address_pool           = "WebServerLB-backendaddresspool"
+        probe                          = "WebServerLB-probe"
     }
 ]

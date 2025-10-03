@@ -71,3 +71,36 @@ module "storage_container" {
     storage_container = var.storage_container
     storage_account = module.storage_account.storage_account_name
 }
+
+module "load_balancer" {
+    source        = "./modules/load_balancer"
+    load_balancer = var.load_balancer
+    public_ip     = module.public_ip.public_ip_id
+}
+
+module "backend_address_pool" {
+    source               = "./modules/backend_address_pool"
+    backend_address_pool = var.backend_address_pool
+    load_balancer        = module.load_balancer.load_balancer_id
+}
+
+module "nic_backend_address_pool_association" {
+    source                       = "./modules/network_interface_backend_address_pool_association"
+    nic_backend_pool_association = var.nic_backend_pool_association
+    network_interface            = module.network_interface.network_interface_id
+    backend_adderss_pool         = module.backend_address_pool.backend_address_pool_id
+}
+
+module "load_balancer_probe" {
+    source              = "./modules/load_balancer_probe"
+    load_balancer_probe = var.load_balancer_probe
+    load_balancer       = module.load_balancer.load_balancer_id
+}
+
+module "load_balancer_inbound_rule" {
+    source                     = "./modules/load_balancer_inbound_rule"
+    load_balancer_inbound_rule = var.load_balancer_inbound_rule
+    load_balancer              = module.load_balancer.load_balancer_id
+    load_balancer_probe        = module.load_balancer_probe.load_balancer_probe_id
+    backend_address_pool       = module.backend_address_pool.backend_address_pool_id
+}
